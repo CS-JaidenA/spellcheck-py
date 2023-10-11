@@ -30,7 +30,23 @@ def binary_search(list, item):
 	
 	return -1
 
-def search(list, word, algorithm):
+def search(list, dictionary, algorithm):
+	length = len(list)
+	not_found_count = 0
+	print(f"{'Linear' if algorithm == linear_search else 'Binary'} search starting...")
+
+	start_time = time.time()
+
+	for i, word in enumerate(list):
+		if algorithm(dictionary, word.lower()) == -1:
+			not_found_count += 1
+		print(f"{i}/{length}", end='\r')
+	
+	end_time = time.time()
+
+	print(f"Number of words not found in dictionary: {not_found_count} ({end_time - start_time}) s")
+
+def spellcheck(list, word, algorithm):
 	print(f"{'Linear' if algorithm == linear_search else 'Binary'} search starting...")
 
 	start_time = time.time()
@@ -67,30 +83,24 @@ def main():
 
 		selection = input("Enter menu selection (1-5): ")
 
+		print()
+
 		match selection:
 			case "1":
 				word = input("Please enter a word: ").lower()
-				search(dictionary, word, linear_search)
+				spellcheck(dictionary, word, linear_search)
 			case "2":
 				word = input("Please enter a word: ").lower()
-				search(dictionary, word, binary_search)
+				spellcheck(dictionary, word, binary_search)
 			case "3":
-				not_found_count = 0
-
-				start_time = time.time()
-
-				for word in aliceWords:
-					if linear_search(dictionary, word.lower()) == -1:
-						not_found_count += 1
-
-				end_time = time.time()
+				search(aliceWords, dictionary, linear_search)
 			case "4":
-				pass
+				search(aliceWords, dictionary, binary_search)
 			case "5":
 				break
 			case _:
 				print("Invalid input! Please try again...")
-		
+
 		print()
 
 def loadWordsFromFile(fileName):
